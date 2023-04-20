@@ -1,4 +1,5 @@
 import numpy as np
+import scipy.special
 import matplotlib.pyplot as plt
 import random
 
@@ -16,6 +17,11 @@ def main_function(x):
 # Точне значення інтегралу від тестової функції
 def exact_test_integral(a, b):
     return (b**3 / 3) - (a**3 / 3)
+
+
+# Точне значення інтегралу від основної функції
+def exact_main_integral(a, b):
+    return scipy.integrate.quad(main_function, a, b)
 
 
 # Генерування випадкової точки
@@ -85,19 +91,19 @@ def plot_result(a, b, points_x, points_y, points_color, mode='test'):
 
 
 if __name__ == '__main__':
-    a = 2
-    b = 3
-    n = 1000
+    a = 1
+    b = 2
+    n = 10000
 
     # Тестовий приклад
     test_integral, points_x, points_y, points_color = monte_carlo_integration(a, b, n, mode='test')
     print(f"Тестовий інтеграл: {test_integral}")
 
-    exact_value = exact_test_integral(a, b)
-    abs_error = abs(exact_value - test_integral)
-    rel_error = abs_error / exact_value
-    print(f"Абсолютна похибка: {abs_error}")
-    print(f"Відносна похибка: {rel_error}")
+    result_exact_value1 = exact_test_integral(a, b)
+    abs_error1 = abs(result_exact_value1 - test_integral)
+    rel_error1 = abs_error1 / result_exact_value1
+    print(f"Абсолютна похибка test: {abs_error1}")
+    print(f"Відносна похибка test: {rel_error1}")
 
     plot_result(a, b, points_x, points_y, points_color, mode='test')
 
@@ -106,6 +112,12 @@ if __name__ == '__main__':
     b_main = 2
     main_integral, points_x_main, points_y_main, points_color_main = monte_carlo_integration(a_main, b_main, n, mode='main')
     print(f"Основний інтеграл: {main_integral}")
+
+    result_exact_value2 = exact_main_integral(a_main, b_main)[0]
+    abs_error2 = abs(result_exact_value2 - main_integral)
+    rel_error2 = abs_error2 / result_exact_value2
+    print(f"Абсолютна похибка main: {abs_error2}")
+    print(f"Відносна похибка main: {rel_error2}")
 
     plot_result(a_main, b_main, points_x_main, points_y_main, points_color_main, mode='main')
 
